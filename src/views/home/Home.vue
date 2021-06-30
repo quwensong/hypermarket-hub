@@ -4,63 +4,10 @@
     <home-swiper :banners="banners"></home-swiper>
     <home-recommend class="home-recommend" :recommends="recommends"></home-recommend>
     <theweek-recommend></theweek-recommend>
-    <tab-control class="tab-control" :titles="['流行','新款','精选']"></tab-control>
+    <tab-control @tabclicked="tabclicked" class="tab-control" :titles="['流行','新款','精选']"></tab-control>
+    <goods-list :goods="goods[currentType].list"></goods-list>
     <ul>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
+
       <li></li>
       <li></li>
       <li></li>
@@ -70,13 +17,15 @@
 </template>
 
 <script>
-import NavBar from "@/components/common/navbar/NavBar";
 import HomeSwiper from "./childComps/HomeSwiper";
 import HomeRecommend from "./childComps/HomeRecommend";
 import TheweekRecommend from "./childComps/TheweekRecommend";
-import tabControl from "@/components/content/tabControl/tabControl";
 
-import {getHomeMultidata} from "@/network/home";
+import NavBar from "@/components/common/navbar/NavBar";
+import tabControl from "@/components/content/tabControl/tabControl";
+import GoodsList from "@/components/content/goods/GoodsList";
+
+import {getHomeMultidata,getHomeGood} from "@/network/home";
 
 export default {
   name: "Home",
@@ -85,25 +34,61 @@ export default {
     HomeSwiper,
     HomeRecommend,
     TheweekRecommend,
-    tabControl
+    tabControl,
+    GoodsList
   },
   data(){
     return {
       banners: [],
-      recommends: [],//推荐数据,
+      recommends: [],//推荐数据
+      goods:{//所有商品保存
+        'pop':{page:0,list:[]},
+        'new':{page:0,list:[]},
+        'sell':{page:0,list:[]}
+      },
+      currentType:'pop'
     }
   },
   created() {
   //  请求多个数据
     this.getHomeMultidatas()
+    this.getHomeGoods('pop')
+    this.getHomeGoods('new')
+    this.getHomeGoods('sell')
+    this.getHomeGoods('sell')
+
+
+
   },
   methods:{
+    ////////////////// 网络请求相关/////////////////////
     getHomeMultidatas(){
       getHomeMultidata().then( res =>{
         //保存home首页数据
         this.banners = res.data.banner.list
         this.recommends = res.data.recommend.list
       })
+    },
+    getHomeGoods(type){
+      const page = this.goods[type].page + 1
+      getHomeGood(type,page).then( res =>{
+        this.goods[type].list = res.data.list//数据保存
+      })
+      this.goods[type].page += 1//搜索完成一遍自动加1
+    },
+  ///////////////  其他方法/////////////
+    tabclicked(index) {
+      switch (index) {
+        case 0:
+          this.currentType = 'pop'
+          break
+        case 1:
+          this.currentType = 'new'
+          break
+        case 2:
+          this.currentType = 'sell'
+          break
+      }
     }
   }
   
@@ -117,10 +102,7 @@ export default {
 }
 
 .home-nav{
-  /* background-color: #ff8198; */
-  /* hypermarket-hub\ */
-  /* D:\webstudy\hypermarket-hub\public\recommend_bg.jpg */
-  /* hypermarket-hub\public\ */
+
   background-image: url("~@/assets/img/home/navbar/homenavbarback.png");
   background-size:100%;
   color: white;
@@ -133,9 +115,11 @@ export default {
 
 }
 .tab-control{
-  margin-top: 10px;
+  background-color: white;
   position: sticky;
-  top: 55px;
+  top: 44px;
+  height: 35px;
+  line-height:30px ;
 }
 
 </style>
