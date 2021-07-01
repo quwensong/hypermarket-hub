@@ -38,6 +38,10 @@ export default {
   font-size: 14px;
   justify-content: space-evenly;
   text-align: center;
+  background-color: white;
+  height: 35px;
+  line-height:30px ;
+  font-weight: bold;
 }
 .active{
   border-bottom: 3px red solid;

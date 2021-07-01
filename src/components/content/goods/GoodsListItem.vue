@@ -44,6 +44,7 @@ export default {
 }
 .priceAndfav :nth-child(2){
   margin-left: 5px;
+  font-weight: bold;
 }
 .priceAndfav :nth-child(2) img{
   width: 10px;
