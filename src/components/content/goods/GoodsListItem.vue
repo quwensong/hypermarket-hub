@@ -1,5 +1,5 @@
 <template>
-  <div class="goodslistitem">
+  <div class="goodslistitem" @click="goodItemClick">
     <img :src="goodsItem.show.img" alt="">
     <div class="title">{{goodsItem.title}}</div>
     <div class="priceAndfav">
@@ -19,7 +19,12 @@ export default {
         return {}
       }
     }
-
+  },
+  methods:{//监听每一个goodsitem的点击
+    goodItemClick(){
+      // this.$router.push('/detail/' + 1324)
+      this.$router.push({ name: 'Detail', query: { iid: this.goodsItem.iid }})
+    }
   }
 }
 </script>

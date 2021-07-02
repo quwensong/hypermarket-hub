@@ -23,6 +23,7 @@ export default {
   },
   computed:{
     isActive(){
+      // 判断活跃路由是不是当前页面
       return this.$route.path.indexOf(this.path) !== -1
     },
     activeStyle(){
@@ -31,6 +32,7 @@ export default {
   },
   methods:{
     itemClick(){
+      // 当被点击的时候，跳转页面
       this.$router.replace(this.path).catch((err)=>{})
     }
   }

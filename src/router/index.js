@@ -13,22 +13,27 @@ const routes = [
   {
     path: '/home',
     name: 'Home',
-    component: ()=>import("../views/home/Home"),
+    component: ()=>import("@/views/home/Home"),
   },
   {
     path: '/classify',
     name: 'Classify',
-    component: ()=>import("../views/classify/Classify"),
+    component: ()=>import("@/views/classify/Classify"),
   },
   {
     path: '/shop',
     name: 'Shop',
-    component: ()=>import("../views/shop/Shop"),
+    component: ()=>import("@/views/shop/Shop"),
   },
   {
     path: '/profile',
     name: 'Profile',
-    component: ()=>import("../views/profile/Profile"),
+    component: ()=>import("@/views/profile/Profile"),
+  },
+  {
+    path: '/detail',
+    name: 'Detail',
+    component: ()=>import("@/views/detail/Detail"),
   }
 ]
 

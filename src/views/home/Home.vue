@@ -58,7 +58,8 @@ export default {
       currentType:'pop',
       isShowBack:false,
       offsetTop:0,
-      isTabshow:false
+      isTabshow:false,
+      saveYposition:0
       
     }
   },
@@ -77,7 +78,7 @@ export default {
     this.offsetTop = this.$refs.tabcontrol.$el.offsetTop
 },
   methods:{
-    //1、网络请求相关
+    //1、网络请求相关方法
     getHomeMultidatas(){
       getHomeMultidata().then( res =>{
         //保存home首页数据
@@ -132,6 +133,13 @@ export default {
       //重新计算位置
       this.$refs.Scroll.scroll.refresh()
     },
+  },//活跃与不活跃的钩子，只有设置keep-alive才有
+  activated() {//回来的时候滚到离开的时候保存的位置
+    this.$refs.Scroll.refresh()//每次回来的时候进行刷新
+    this.$refs.Scroll.scrollToTop(0,this.saveYposition,1)
+  },
+  deactivated() {//离开的时候保存 y 坐标
+    this.saveYposition = this.$refs.Scroll.scroll.y
   }
 
 }

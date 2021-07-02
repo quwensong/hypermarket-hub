@@ -31,7 +31,8 @@ export default {
       observeDOM:true,
       click:true,
       probeType: this.probeType,
-      pullUpLoad:this.pullUp
+      pullUpLoad:this.pullUp,
+      refresh:true
   })
     //监听位置
     this.scroll.on('scroll',(position)=>{
@@ -48,6 +49,9 @@ export default {
     },
     finishPullUp(){
       this.scroll.finishPullUp()
+    },
+    refresh(){
+      this.scroll.refresh()
     }
   }
 }
