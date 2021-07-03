@@ -5,6 +5,9 @@
       <detail-swiper :top-images="topImages"></detail-swiper>
       <detail-base-info :goods="goods"></detail-base-info>
       <detail-shop-info :shop="shop"></detail-shop-info>
+      <detail-goods-info :detail-info="detailInfo"></detail-goods-info>
+      <detail-item-params :item-params="itemParams"></detail-item-params>
+      <detail-comment-info :comment-info="commentInfo"></detail-comment-info>
     </scroll>
   </div>
 
@@ -14,6 +17,9 @@
 import DetailNavBar from "./childComponents/DetailNavBar";
 import DetailSwiper from "./detailswiper/DetailSwiper";
 import DetailBaseInfo from "./childComponents/DetailBaseInfo";
+import DetailGoodsInfo from "./childComponents/DetailGoodsInfo";
+import DetailItemParams from "./childComponents/DetailItemParams";
+import DetailCommentInfo from "./childComponents/DetailCommentInfo";
 
 import Scroll from "@/components/common/scroll/Scroll";
 
@@ -27,7 +33,11 @@ export default {
     DetailNavBar,
     DetailSwiper,
     DetailBaseInfo,
+    DetailGoodsInfo,
+    DetailItemParams,
+    DetailCommentInfo,
     Scroll
+
   },
   data(){
     return {
@@ -35,7 +45,10 @@ export default {
       detailMsg:{},
       topImages:[],
       goods:{},
-      shop:{}
+      shop:{},
+      detailInfo:{},
+      itemParams:{},
+      CommentInfo:{}
     }
   },
   activated() {//跳转到详情页的时候保存 iid 的值
@@ -48,6 +61,15 @@ export default {
       this.goods = new Goods(data.itemInfo,data.columns,data.shopInfo.services)
       //3、店铺信息
       this.shop = new Shop(data.shopInfo)
+      //4、取出详情信息
+      this.detailInfo = data.detailInfo
+      //6、取出参数信息
+      this.itemParams = data.itemParams
+      //7、获取评论信息
+      if(data.rate.cRate !== 0){
+        this.commentInfo = data.rate.list[0]
+      }
+
     })
   }
 }
