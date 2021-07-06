@@ -1,6 +1,6 @@
 <template>
   <div class="goodslistitem" @click="goodItemClick">
-    <img :src="goodsItem.show.img" alt="">
+    <img :src="showImg" alt="">
     <div class="title">{{goodsItem.title}}</div>
     <div class="priceAndfav">
       <span>¥{{goodsItem.price}}</span>
@@ -20,10 +20,21 @@ export default {
       }
     }
   },
+  computed:{
+    showImg(){
+      return this.goodsItem.image || this.goodsItem.show.img
+    }
+  }
+,
   methods:{//监听每一个goodsitem的点击
+    //item_id
     goodItemClick(){
       // this.$router.push('/detail/' + 1324)
+      if(this.goodsItem.item_id){
+        // this.goodsItem.iid = this.goodsItem.item_id
+      }
       this.$router.push({ name: 'Detail', query: { iid: this.goodsItem.iid }})
+    // console.log(this.goodsItem.iid)
     }
   }
 }

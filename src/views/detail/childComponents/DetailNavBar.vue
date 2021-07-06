@@ -29,11 +29,13 @@ export default {
   methods:{
     detailClick(index){
       this.currentIndex = index
+      this.$emit('titleClick',index)
     },
     leftImgclick(){//返回
       this.$router.back()
     //  或者 this.$router.go(-1)
-    }
+    },
+
   }
 }
 </script>

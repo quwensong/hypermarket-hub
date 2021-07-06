@@ -1,13 +1,14 @@
 <template>
   <div class="detail">
-    <detail-nav-bar class="detail-nav-bar"></detail-nav-bar>
-    <scroll class="content">
+    <detail-nav-bar ref="nav" class="detail-nav-bar" @titleClick="titleClick"></detail-nav-bar>
+    <scroll class="content" ref="scroll" :probe-type="3" @scroll="ContentScroll">
       <detail-swiper :top-images="topImages"></detail-swiper>
       <detail-base-info :goods="goods"></detail-base-info>
       <detail-shop-info :shop="shop"></detail-shop-info>
       <detail-goods-info :detail-info="detailInfo"></detail-goods-info>
-      <detail-item-params :item-params="itemParams"></detail-item-params>
-      <detail-comment-info :comment-info="commentInfo"></detail-comment-info>
+      <detail-item-params ref="params" :item-params="itemParams"></detail-item-params>
+      <detail-comment-info ref="comments" :comment-info="commentInfo"></detail-comment-info>
+      <goods-list ref="goodslist" class="good-list" :goods = "recommends"></goods-list>
     </scroll>
   </div>
 
@@ -22,8 +23,10 @@ import DetailItemParams from "./childComponents/DetailItemParams";
 import DetailCommentInfo from "./childComponents/DetailCommentInfo";
 
 import Scroll from "@/components/common/scroll/Scroll";
+import GoodsList from "@/components/content/goods/GoodsList";
 
-import {getDetail,Goods,Shop} from "@/network/detail";
+import {getDetail,Goods,Shop,getRecommend} from "@/network/detail";
+
 import DetailShopInfo from "./childComponents/DetailShopInfo";
 
 export default {
@@ -36,7 +39,8 @@ export default {
     DetailGoodsInfo,
     DetailItemParams,
     DetailCommentInfo,
-    Scroll
+    Scroll,
+    GoodsList
 
   },
   data(){
@@ -48,7 +52,10 @@ export default {
       shop:{},
       detailInfo:{},
       itemParams:{},
-      CommentInfo:{}
+      CommentInfo:{},
+      recommends:[],
+      themTopY:[],
+      currentIndex:0
     }
   },
   activated() {//跳转到详情页的时候保存 iid 的值
@@ -69,8 +76,43 @@ export default {
       if(data.rate.cRate !== 0){
         this.commentInfo = data.rate.list[0]
       }
+      this.$nextTick(()=>{
+
+      })
 
     })
+      //8、请求推荐数据
+    getRecommend().then(res => {
+      this.recommends = res.data.list
+    })
+  },
+  methods:{
+    titleClick(index){
+      this.themTopY = []
+      this.themTopY.push(0)
+      this.themTopY.push(this.$refs.params.$el.offsetTop)
+      this.themTopY.push(this.$refs.comments.$el.offsetTop)
+      this.themTopY.push(this.$refs.goodslist.$el.offsetTop)
+
+      this.$refs.scroll.scroll.scrollTo(0,-this.themTopY[index],400)
+
+    },
+    // 根据滚动距离来改变导航栏颜色
+    ContentScroll(position){
+      const positionY = -position.y
+
+      let length = this.themTopY.length
+      for(let i = 0 ;i < length; i++){
+        if(this.currentIndex !== i && (i < length -1 && positionY >= this.themTopY[i] && positionY < this.themTopY[i+1])
+        || (i === length-1 && positionY >= this.themTopY[i])){
+          this.currentIndex = i
+          // 关键代码
+          this.$refs.nav.currentIndex = this.currentIndex
+        }
+      }
+      
+    }
+
   }
 }
 </script>
@@ -89,5 +131,8 @@ export default {
   position: relative;
   z-index: 16;
   background-color: #f6f6f6;
+}
+.good-list{
+  margin-top: 5px;
 }
 </style>
