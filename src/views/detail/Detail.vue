@@ -10,6 +10,8 @@
       <detail-comment-info ref="comments" :comment-info="commentInfo"></detail-comment-info>
       <goods-list ref="goodslist" class="good-list" :goods = "recommends"></goods-list>
     </scroll>
+    <detail-bottom-bar @addToCart="addcart"></detail-bottom-bar>
+
   </div>
 
 </template>
@@ -21,6 +23,7 @@ import DetailBaseInfo from "./childComponents/DetailBaseInfo";
 import DetailGoodsInfo from "./childComponents/DetailGoodsInfo";
 import DetailItemParams from "./childComponents/DetailItemParams";
 import DetailCommentInfo from "./childComponents/DetailCommentInfo";
+import DetailBottomBar from "./childComponents/DetailBottomBar";
 
 import Scroll from "@/components/common/scroll/Scroll";
 import GoodsList from "@/components/content/goods/GoodsList";
@@ -39,6 +42,7 @@ export default {
     DetailGoodsInfo,
     DetailItemParams,
     DetailCommentInfo,
+    DetailBottomBar,
     Scroll,
     GoodsList
 
@@ -111,6 +115,17 @@ export default {
         }
       }
       
+    },
+    //加入购物车
+    addcart(){
+      const product = {}
+      product.img = this.topImages[0]
+      product.title = this.goods.title
+      product.price = this.goods.realPrice
+      product.iid = this.iid
+
+      // this.$store.commit('addCart',product)
+      this.$store.dispatch('addCart',product)
     }
 
   }
@@ -125,7 +140,7 @@ export default {
   height: 100vh;
 }
 .content{
-  height: calc(100% - 44px);
+  height: calc(100% - 44px - 49px);
 }
 .detail-nav-bar{
   position: relative;
