@@ -11,7 +11,7 @@
       <goods-list ref="goodslist" class="good-list" :goods = "recommends"></goods-list>
     </scroll>
     <detail-bottom-bar @addToCart="addcart"></detail-bottom-bar>
-
+<!--    <toast class="toast" message="hhh"></toast>-->
   </div>
 
 </template>
@@ -27,6 +27,7 @@ import DetailBottomBar from "./childComponents/DetailBottomBar";
 
 import Scroll from "@/components/common/scroll/Scroll";
 import GoodsList from "@/components/content/goods/GoodsList";
+// import Toast from "@/components/common/toast/Toast";
 
 import {getDetail,Goods,Shop,getRecommend} from "@/network/detail";
 
@@ -44,7 +45,8 @@ export default {
     DetailCommentInfo,
     DetailBottomBar,
     Scroll,
-    GoodsList
+    GoodsList,
+    // Toast
 
   },
   data(){
@@ -125,7 +127,10 @@ export default {
       product.iid = this.iid
 
       // this.$store.commit('addCart',product)
-      this.$store.dispatch('addCart',product)
+      this.$store.dispatch('addCart',product).then( res => {
+
+        this.$toast.show(res,1500)
+      })
     }
 
   }
@@ -133,6 +138,15 @@ export default {
 </script>
 
 <style scoped>
+/*.toast{*/
+/*  position: fixed;*/
+/*  top: 50%;*/
+/*  left: 50%;*/
+/*  color: white;*/
+/*  background-color:rgba(0,0,0,0.5);*/
+/*  transform:translate(-50%,-50%);*/
+/*}*/
+
 .detail{
   position: relative;
   z-index: 13;

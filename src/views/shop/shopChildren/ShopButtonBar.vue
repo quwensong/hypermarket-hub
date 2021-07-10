@@ -8,8 +8,8 @@
     <div>
       合计:{{totalPrice}}
     </div>
-    <div class="cal-right">
-      去结算({{$store.getters.cartLength}})
+    <div class="cal-right" @click="calcClick">
+      去结算({{getcallength}})
     </div>
   </div>
 </template>
@@ -39,6 +39,11 @@ export default {
           return !item.check
         }).length)
       }
+    },
+    getcallength(){
+      return this.$store.getters.cartList.filter(item => {
+        return item.check
+      }).length
     }
   },
   methods:{
@@ -47,6 +52,11 @@ export default {
         this.$store.getters.cartList.forEach(item => item.check = false)
       }else{
         this.$store.getters.cartList.forEach(item => item.check = true)
+      }
+    },
+    calcClick(){
+      if(this.getcallength === 0){
+        this.$toast.show('请选择商品',1500)
       }
     }
   }
